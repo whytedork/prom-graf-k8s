@@ -1,0 +1,33 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: dep-prometheus
+
+
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: prometheus
+
+
+  template:
+    metadata:
+      name: dep-prometheus
+      labels:
+        app: prometheus
+
+
+    spec:
+      volumes:
+        - name: storage-prometheus
+          persistentVolumeClaim:
+            claimName: pv-claim-prometheus
+        
+      containers:
+        - name: prometheus-os
+          image: 1701410046/prometheus:latest
+          imagePullPolicy: IfNotPresent
+          volumeMounts:
+            - mountPath: "/data_prometheus"
+              name: storage-prometheus
